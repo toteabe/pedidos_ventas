@@ -69,7 +69,7 @@ public class PedidoDAOImpl implements PedidoDAO<Pedido>{
         List<Pedido> listPedido = this.jdbcTemplate.query("""
                 SELECT * FROM  pedido P left join cliente C on  P.id_cliente = C.id
                                         left join comercial CO on P.id_comercial = CO.id
-                """, (rs, rowNum) -> PedidoDAO.newPedido(rs)
+                """, (rs, rowNum) -> UtilDAO.newPedido(rs)
         );
 
         return listPedido;
@@ -82,7 +82,7 @@ public class PedidoDAOImpl implements PedidoDAO<Pedido>{
                     select * from pedido P left join cliente C on  P.id_cliente = C.id
                                         left join comercial CO on P.id_comercial = CO.id
                                         WHERE P.id = ?
-                """, (rs, rowNum) -> PedidoDAO.newPedido(rs), id);
+                """, (rs, rowNum) -> UtilDAO.newPedido(rs), id);
 
         if (pedido != null) return Optional.of(pedido);
         log.debug("No encontrado pedido con id {} devolviendo Optional.empty()", id);
