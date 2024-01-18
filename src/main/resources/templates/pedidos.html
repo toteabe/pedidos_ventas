@@ -1,13 +1,116 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
 <head>
     <th:block th:include="fragments/general.html :: headfiles"/>
-    <title>#{etq.pedidos}</title>
+    <title th:text="#{msg.pedidos}">Pedidos</title>
 </head>
-<body>
+<body class="bg-light">
 
-#{etq.pedidos}
+<!-- BackToTop Button -->
+<a href="javascript:void(0);" id="backToTop" class="back-to-top">
+    <i class="arrow"></i><i class="arrow"></i>
+</a>
 
+<div class="container bg-white sticky-top">
+    <div class="row mb-2 border-bottom">
+        <div class="col-md-8 h1" th:text="#{msg.pedidos}">Pedidos</div>
+        <div class="col-md-4 align-self-center" ><form method="get" action="/pedidos/crear">
+            <input class="btn btn-primary"  type="submit" th:value="#{btn.crear}" value="Crear">
+        </form></div>
+    </div>
+    <div class="row">
+        <div class="col-md-1 h3" th:text="#{msg.id}">ID</div>
+        <div class="col-md-3 h3" th:text="#{msg.cliente}">Cliente</div>
+        <div class="col-md-3 h3" th:text="#{msg.comercial}">Comercial</div>
+        <div class="col-md-1 h3" th:text="#{msg.fecha}">Fecha</div>
+        <div class="col-md-2 h3" th:text="#{msg.total}">Total</div>
+        <div class="col-md-2 h3 text-center" th:text="#{msg.operacion}">Operación</div>
+    </div>
+</div>
+
+<div class="container bg-light">
+    <div th:id="${pedido.id}" class="row mt-2 body" th:each="pedido : ${listaPedidos}">
+        <div class="col-md-1 align-self-center" th:text="${pedido.id}">id
+        </div>
+        <div class="col-md-3 align-self-center" th:text="${pedido.cliente.nombre}+' '+${pedido.cliente.apellido1}+' '+${pedido.cliente.apellido2}">cliente
+        </div>
+        <div class="col-md-3 align-self-center" th:text="${pedido.comercial.nombre}+' '+${pedido.comercial.apellido1}+' '+${pedido.comercial.apellido2}">comercial
+        </div>
+        <div class="col-md-1 align-self-center" th:text="${pedido.fecha}">fecha
+        </div>
+        <div class="col-md-2 align-self-center" th:text="${pedido.total}">total
+        </div>
+
+        <div class="col-md-2 align-self-center text-center">
+            <form class="d-inline" method="post" th:action="@{/pedidos/borrar/__${pedido.id}__}">
+                <input type="hidden" name="codigo" th:value="${pedido.id}"/>
+                <input class="btn btn-primary"  type="submit" th:value="#{btn.borrar}">
+            </form>
+            <form class="d-inline" method="get" th:action="@{/pedidos/editar/__${pedido.id}__}">
+                <input type="hidden" name="codigo" th:value="${pedido.id}"/>
+                <input class="btn btn-primary"  type="submit" th:value="#{btn.editar}">
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/jquery.js" ></script>
+<script type="text/javascript">
+    $(function (){
+        //IMPLEMENTANDO UN BOTÓN backToTop
+        let btn = $('#backToTop');
+        $(window).on('scroll', function() {
+            if ($(window).scrollTop() > 300) {
+                btn.addClass('show');
+            } else {
+                btn.removeClass('show');
+            }
+        });
+        btn.on('click', function(e) {
+            e.preventDefault();
+            $('html, body').animate({
+                scrollTop: 0
+            }, '300');
+        });
+    });
+
+</script>
+<th:block th:if="${newPedidoID}">
+<div class="modal fade" id="newSocioIDModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Grabar Socio</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" th:text="">
+                Grabado correctamente pedido con ID
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close" data-dismiss="modal">Cerrar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //DINAMISMO CON JQUERY..
+    //CUANDO SE CARGA EL DOM JQUERY EJECUTA SOBRE SELECTOR DE CAPA MODAL AL MODAL
+    $(function (){
+        $('#newPedidoIDModal').modal('show');
+        $('#newPedidoIDModal').on('click', 'button.close', function (eventObject) {
+            $('#newPedidoIDModal').modal('hide');
+
+            //PARA HACER SMOOTH SCROLL AL ELEMENTO NUEVO ELEMENTO EN LA PÁGINA
+            $('html, body').animate({
+                scrollTop: $('#<%=newPedidoID%>').offset().top
+            }, 2000, () => $('#<%=newPedidoID%>').addClass('highlight'));
+        });
+    });
+</script>
+</th:block>
+<script  th:src="@{/js/bootstrap.bundle.js}" />
 </body>
 </html>

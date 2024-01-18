@@ -1,0 +1,40 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/general.html :: headfiles"/>
+    <title th:text="#{msg.pedidos.crear}">Pedidos</title>
+</head>
+<body>
+
+<div class="container">
+    <form action="/pedidos/crear" th:object="${pedido}" method="post">
+        <div class="row mb-2 border-bottom">
+            <div class="col-md-8 h1" th:text="#{msg.pedidos.crear}">Crear Pedido</div>
+            <div class="col-md-4 align-self-center" >
+                <input class="btn btn-primary"  type="submit" th:value="#{btn.crear}" value="Crear">
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-3 align-self-center">
+            <label for="inputnombre" class="form-label" th:text="#{msg.id}">
+                Id
+            </label>
+            </div>
+            <div class="col-md-3 align-self-center">
+                <input id="inputnombre" class="form-control" th:field="*{id}" />
+            </div>
+            <div class="col-md-3 align-self-center">
+                <label for="inputfecha" class="form-label" th:text="#{msg.fecha}">
+                    Fecha
+                </label>
+            </div>
+            <div class="col-md-3 align-self-center">
+                <input id="inputfecha" class="form-control" th:field="*{fecha}" />
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
