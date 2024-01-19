@@ -1,7 +1,10 @@
 package org.iesvdm.pedidos_ventas.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.iesvdm.pedidos_ventas.dao.ClienteDAO;
+import org.iesvdm.pedidos_ventas.dao.ComercialDAO;
 import org.iesvdm.pedidos_ventas.dao.PedidoDAO;
+import org.iesvdm.pedidos_ventas.domain.Cliente;
 import org.iesvdm.pedidos_ventas.domain.Pedido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +19,26 @@ public class PedidoService implements ServiceBase<Pedido> {
     @Autowired
     private PedidoDAO pedidoDAO;
 
+    @Autowired
+    private ClienteDAO clienteDAO;
+
+    @Autowired
+    private ComercialDAO comercialDAO;
+
     @Override
     public List<Pedido> listAll() {
         return this.pedidoDAO.getAll();
     }
+
+    public List<Cliente> clientesByIdPedido(int id) {
+        return this.pedidoDAO.getAllClientesByIdPedido(id);
+    }
+
+    public List<Cliente> getAllClientes() {
+        return this.clienteDAO.getAll();
+    }
+
+    public List<Comercial> getAllComercial() {return this;}
 
     @Override
     public Pedido one(int id) {

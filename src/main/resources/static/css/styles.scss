@@ -74,6 +74,8 @@ tbody td{
 .row.body:nth-child(odd){
   background-color: #aaaaaa;
 }
+
+.select2-container .select2-selection--single { height: 34px; }
 /*For medium screen
 @media (min-width: 768px) {
     .row.body:nth-child(4n), .row:nth-child(4n-1) {

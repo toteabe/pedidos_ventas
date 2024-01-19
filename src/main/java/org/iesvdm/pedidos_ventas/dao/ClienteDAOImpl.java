@@ -1,11 +1,19 @@
 package org.iesvdm.pedidos_ventas.dao;
 
 import org.iesvdm.pedidos_ventas.domain.Cliente;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class ClienteDAOImpl implements ClienteDAO<Cliente>{
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     @Override
     public void create(Cliente cliente) {
 
@@ -13,7 +21,11 @@ public class ClienteDAOImpl implements ClienteDAO<Cliente>{
 
     @Override
     public List<Cliente> getAll() {
-        return null;
+
+        return this.jdbcTemplate.query("""
+                    select * from cliente
+                """, (rs, rowNum) -> UtilDAO.newCliente(rs));
+
     }
 
     @Override

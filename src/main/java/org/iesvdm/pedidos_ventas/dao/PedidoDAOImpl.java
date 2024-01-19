@@ -25,9 +25,9 @@ public class PedidoDAOImpl implements PedidoDAO<Pedido>{
     public Optional<Cliente> findClienteBy(int pedidoId) {
 
         Cliente cliente = this.jdbcTemplate.queryForObject("""
-                            select C.* from pedido P join cliente C on P 
+                            select C.* from pedido P join cliente C on P.id_cliente = C.id and P.id = '' 
                 """
-                , (rs, rowNum) -> ClienteDAO.newCliente(rs)
+                , (rs, rowNum) -> UtilDAO.newCliente(rs), pedidoId
         );
 
         return null;
@@ -36,6 +36,18 @@ public class PedidoDAOImpl implements PedidoDAO<Pedido>{
     @Override
     public Optional<Comercial> findComercialBy(int pedidoId) {
         return null;
+    }
+
+    @Override
+    public List<Cliente> getAllClientesByIdPedido(int pedidoId) {
+
+       List<Cliente> clienteList = this.jdbcTemplate.query("""
+                select C.* from pedido P join cliente C on P.id_cliente = C.id  
+                and P.id = ?
+                """, (rs, rowNum) -> UtilDAO.newCliente(rs)
+                , pedidoId);
+
+        return clienteList;
     }
 
     @Override

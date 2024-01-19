@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="fragments/general.html :: headfiles"/>
+    <link th:href="@{/css/backtop.css}" rel="stylesheet"/>
     <title th:text="#{msg.pedidos}">Pedidos</title>
 </head>
 <body class="bg-light">
@@ -111,6 +112,6 @@
     });
 </script>
 </th:block>
-<script  th:src="@{/js/bootstrap.bundle.js}" />
+<script th:src="@{/js/bootstrap.bundle.js}" type="text/javascript" ></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package org.iesvdm.pedidos_ventas.controller;
 
 import org.iesvdm.pedidos_ventas.domain.Pedido;
+import org.iesvdm.pedidos_ventas.domain.Cliente;
 import org.iesvdm.pedidos_ventas.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +46,9 @@ public class PedidoController {
 
         Pedido pedido = new Pedido();
         model.addAttribute("pedido", pedido);
+
+        List<Cliente> listaClientes = this.pedidoService.getAllClientes();
+        model.addAttribute("listaClientes", listaClientes);
 
         return "crear-pedido";
 
