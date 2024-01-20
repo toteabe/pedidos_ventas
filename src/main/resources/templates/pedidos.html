@@ -60,7 +60,7 @@
             <form th:name="|formdelete${pedido.id}|" class="d-inline" method="post" th:action="@{/pedidos/borrar/__${pedido.id}__}">
                 <input type="hidden" name="codigo" th:value="${pedido.id}"/>
             </form>
-            <button class="btn btn-danger formdelete" th:attr="data-pedido-id=${pedido.id}" th:text="#{btn.borrar}">
+            <button class="btn btn-danger formdelete" th:attr="data-pedido-id=${pedido.id}" th:text="#{btn.borrar}" />
         </div>
     </div>
 </div>
@@ -69,7 +69,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel" th:text="#{msg.pedidos}">Pedidos</h5>
+                <h5 class="modal-title" id="exampleModalLabel2" th:text="#{msg.pedidos}">Pedidos</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
