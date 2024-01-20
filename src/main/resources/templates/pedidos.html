@@ -19,7 +19,7 @@
             <input class="btn btn-primary"  type="submit" th:value="#{btn.crear}" value="Crear">
         </form></div>
         <div th:class="'col-md-1'+ ${borradoPedidoID == null ? '': ' highlight'}">
-            <span id="info" th:if="${borradoPedidoID}" th:text="|#{msg.borrar.pedido.ok1} ${borradoPedidoID} #{msg.borrar.pedido.ok2}|"></span>
+            <span id="info" th:if="${borradoPedidoID != null}" th:text="|#{msg.borrar.pedido.ok1} ${borradoPedidoID} #{msg.borrar.pedido.ok2}|"></span>
         </div>
         <div class="col-md-4 align-self-center" >
             <span th:text="#{lang.cambio}"></span>:
@@ -47,9 +47,9 @@
         </div>
         <div class="col-md-3 align-self-center" th:text="${pedido.comercial.nombre}+' '+${pedido.comercial.apellido1}+' '+${pedido.comercial.apellido2}">comercial
         </div>
-        <div class="col-md-1 align-self-center" th:text="${pedido.fecha}">fecha
+        <div class="col-md-1 align-self-center" th:text="${#dates.format(pedido.fecha, 'dd-MM-yyyy')}">fecha
         </div>
-        <div class="col-md-2 align-self-center" th:text="${pedido.total}">total
+        <div class="col-md-2 align-self-center" th:text="${#numbers.formatCurrency(pedido.total)}">total
         </div>
 
         <div class="col-md-2 align-self-center text-center">
