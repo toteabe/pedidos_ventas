@@ -15,9 +15,19 @@
 <div class="container bg-white sticky-top">
     <div class="row mb-2 border-bottom">
         <div class="col-md-8 h1" th:text="#{msg.pedidos}">Pedidos</div>
-        <div class="col-md-4 align-self-center" ><form method="get" action="/pedidos/crear">
+        <div class="col-md-3 align-self-center" ><form method="get" action="/pedidos/crear">
             <input class="btn btn-primary"  type="submit" th:value="#{btn.crear}" value="Crear">
         </form></div>
+        <div th:class="'col-md-1'+ ${borradoPedidoID == null ? '': ' highlight'}">
+            <span id="info" th:if="${borradoPedidoID}" th:text="|#{msg.borrar.pedido.ok1} ${borradoPedidoID} #{msg.borrar.pedido.ok2}|"></span>
+        </div>
+        <div class="col-md-4 align-self-center" >
+            <span th:text="#{lang.cambio}"></span>:
+            <select id="locales">
+                <option value="es" th:text="#{lang.espaniol}"></option>
+                <option value="en" th:text="#{lang.ingles}"></option>
+            </select>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-1 h3" th:text="#{msg.id}">ID</div>
@@ -43,20 +53,63 @@
         </div>
 
         <div class="col-md-2 align-self-center text-center">
-            <form class="d-inline" method="post" th:action="@{/pedidos/borrar/__${pedido.id}__}">
-                <input type="hidden" name="codigo" th:value="${pedido.id}"/>
-                <input class="btn btn-primary"  type="submit" th:value="#{btn.borrar}">
-            </form>
             <form class="d-inline" method="get" th:action="@{/pedidos/editar/__${pedido.id}__}">
                 <input type="hidden" name="codigo" th:value="${pedido.id}"/>
                 <input class="btn btn-primary"  type="submit" th:value="#{btn.editar}">
             </form>
+            <form th:name="|formdelete${pedido.id}|" class="d-inline" method="post" th:action="@{/pedidos/borrar/__${pedido.id}__}">
+                <input type="hidden" name="codigo" th:value="${pedido.id}"/>
+            </form>
+            <button class="btn btn-danger formdelete" th:attr="data-pedido-id=${pedido.id}" th:text="#{btn.borrar}">
         </div>
     </div>
 </div>
-
 <script type="text/javascript" src="js/jquery.js" ></script>
-<script type="text/javascript">
+<div class="modal fade" id="newBorrarIDModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" th:text="#{msg.pedidos}">Pedidos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="msgborrarpedidomodal" class="modal-body" th:text="#{msg.borrar.pedido}">
+                Desea borrar pedido con ID
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger delete" data-dismiss="modal" th:text="#{btn.borrar}">Borrar</button>
+                <button type="button" class="btn btn-secondary close" data-dismiss="modal" th:text="#{btn.cancelar}">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    //DINAMISMO CON JQUERY..
+    //CUANDO SE CARGA EL DOM JQUERY EJECUTA SOBRE SELECTOR DE CAPA MODAL AL MODAL
+    $(function (){
+
+        $('.btn.formdelete').click( function (eventObject) {
+            let pedidoID = $(this).attr('data-pedido-id');
+            $('#msgborrarpedidomodal').text([[#{msg.borrar.pedido}]]+ ' ' +pedidoID + '?')
+            $('#newBorrarIDModal button.delete').attr('data-pedido-id', pedidoID);
+            $('#newBorrarIDModal').modal('show');
+        });
+
+        $('#newBorrarIDModal').on('click', 'button.delete', function (eventObject) {
+            let pedidoID = $(this).attr('data-pedido-id');
+            document.forms['formdelete'+pedidoID].submit();
+            $('#newBorrarIDModal').modal('hide');
+        });
+
+        $('#newBorrarIDModal').on('click', 'button.close', function (eventObject) {
+            $('#newBorrarIDModal').modal('hide');
+        });
+
+    });
+</script>
+
+<script th:inline="javascript">
     $(function (){
         //IMPLEMENTANDO UN BOTÓN backToTop
         let btn = $('#backToTop');
@@ -73,41 +126,60 @@
                 scrollTop: 0
             }, '300');
         });
+
+        let url = new URL(window.location.href);
+        let valLang = url.searchParams.get('lang')
+        $('#locales option[value='+valLang+']').attr('selected', 'selected');
+
+        $("#locales").change(function () {
+            var selectedOption = $('#locales').val();
+            if (selectedOption != ''){
+                let url = new URL(window.location.href);
+                url.searchParams.set('lang', selectedOption);
+                window.location.href= url.href;
+            }
+        });
+
+        /*[# th:if="${editPedidoID}"]*/
+        $('html, body').animate({
+            scrollTop: $('#'+[[${editPedidoID}]]).offset().top-137
+        }, 1000, () => $('#'+[[${editPedidoID}]]).addClass('highlight'));
+        /*[/]*/
+
     });
 
 </script>
 <th:block th:if="${newPedidoID}">
-<div class="modal fade" id="newSocioIDModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="newGrabaIDModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Grabar Socio</h5>
+                <h5 class="modal-title" id="exampleModalLabel" th:text="#{msg.pedidos}">Pedidos</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" th:text="">
+            <div class="modal-body" th:text="|#{msg.grabo.pedido.ok} ${newPedidoID}|">
                 Grabado correctamente pedido con ID
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary close" data-dismiss="modal">Cerrar</button>
-
+                <button type="button" class="btn btn-secondary close" data-dismiss="modal" th:text="#{btn.cerrar}" >Cerrar</button>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
+<script th:inline="javascript">
     //DINAMISMO CON JQUERY..
     //CUANDO SE CARGA EL DOM JQUERY EJECUTA SOBRE SELECTOR DE CAPA MODAL AL MODAL
     $(function (){
-        $('#newPedidoIDModal').modal('show');
-        $('#newPedidoIDModal').on('click', 'button.close', function (eventObject) {
-            $('#newPedidoIDModal').modal('hide');
+        $('#newGrabaIDModal').modal('show');
+        $('#newGrabaIDModal').on('click', 'button.close', function (eventObject) {
+            $('#newGrabaIDModal').modal('hide');
 
             //PARA HACER SMOOTH SCROLL AL ELEMENTO NUEVO ELEMENTO EN LA PÁGINA
             $('html, body').animate({
-                scrollTop: $('#<%=newPedidoID%>').offset().top
-            }, 2000, () => $('#<%=newPedidoID%>').addClass('highlight'));
+                scrollTop: $('#'+[[${newPedidoID}]]).offset().top
+            }, 1000, () => $('#'+[[${newPedidoID}]]).addClass('highlight'));
         });
     });
 </script>

@@ -1,5 +1,6 @@
 package org.iesvdm.pedidos_ventas.controller;
 
+import org.iesvdm.pedidos_ventas.domain.Comercial;
 import org.iesvdm.pedidos_ventas.domain.Pedido;
 import org.iesvdm.pedidos_ventas.domain.Cliente;
 import org.iesvdm.pedidos_ventas.service.PedidoService;
@@ -7,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
@@ -22,10 +20,17 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     @GetMapping("/pedidos")
-    public String listar(Model model) {
+    public String listar(Model model,
+                         @RequestParam(required = false) Integer newPedidoID,
+                         @RequestParam(required = false) Integer editPedidoID,
+                         @RequestParam(required = false) Integer borradoPedidoID) {
 
         List<Pedido> listAllPed =  pedidoService.listAll();
         model.addAttribute("listaPedidos", listAllPed);
+
+        if (newPedidoID != null) model.addAttribute("newPedidoID", newPedidoID);
+        if (editPedidoID != null) model.addAttribute("editPedidoID", editPedidoID);
+        if (borradoPedidoID != null) model.addAttribute("borradoPedidoID", borradoPedidoID);
 
         return "pedidos";
 
@@ -50,16 +55,19 @@ public class PedidoController {
         List<Cliente> listaClientes = this.pedidoService.getAllClientes();
         model.addAttribute("listaClientes", listaClientes);
 
+        List<Comercial> listaComerciales = this.pedidoService.getAllComercial();
+        model.addAttribute("listaComerciales", listaComerciales);
+
         return "crear-pedido";
 
     }
 
     @PostMapping("/pedidos/crear")
-    public RedirectView submitCrear(@ModelAttribute("pedido") Pedido pedido) {
+    public String submitCrear(@ModelAttribute("pedido") Pedido pedido, Model model) {
 
         pedidoService.create(pedido);
 
-        return new RedirectView("/pedidos") ;
+        return "redirect:/pedidos?newPedidoID="+pedido.getId();
 
     }
 
@@ -69,17 +77,22 @@ public class PedidoController {
         Pedido pedido = pedidoService.one(id);
         model.addAttribute("pedido", pedido);
 
+        List<Cliente> listaClientes = this.pedidoService.getAllClientes();
+        model.addAttribute("listaClientes", listaClientes);
+
+        List<Comercial> listaComerciales = this.pedidoService.getAllComercial();
+        model.addAttribute("listaComerciales", listaComerciales);
+
         return "editar-pedido";
 
     }
-
 
     @PostMapping("/pedidos/editar/{id}")
     public RedirectView submitEditar(@ModelAttribute("pedido") Pedido pedido) {
 
         pedidoService.replace(pedido);
 
-        return new RedirectView("/pedidos");
+        return new RedirectView("/pedidos?editPedidoID="+pedido.getId());
     }
 
     @PostMapping("/pedidos/borrar/{id}")
@@ -87,6 +100,6 @@ public class PedidoController {
 
         pedidoService.delete(id);
 
-        return new RedirectView("/pedidos");
+        return new RedirectView("/pedidos?borradoPedidoID="+id);
     }
 }

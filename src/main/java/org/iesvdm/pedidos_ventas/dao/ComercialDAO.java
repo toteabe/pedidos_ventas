@@ -1,4 +1,6 @@
 package org.iesvdm.pedidos_ventas.dao;
 
-public interface ComercialDAO<Comercial> extends RepositoryBase<Comcercial>{
+import org.iesvdm.pedidos_ventas.domain.Comercial;
+
+public interface ComercialDAO<T> extends RepositoryBase<T>{
 }

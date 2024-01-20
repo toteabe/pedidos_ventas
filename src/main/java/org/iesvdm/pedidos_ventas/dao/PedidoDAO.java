@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public interface PedidoDAO<Pedido> extends RepositoryBase<Pedido> {
+public interface PedidoDAO<T> extends RepositoryBase<T> {
 
     public Optional<Cliente> findClienteBy(int pedidoId);
 

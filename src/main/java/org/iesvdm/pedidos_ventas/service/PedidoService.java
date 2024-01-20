@@ -5,6 +5,7 @@ import org.iesvdm.pedidos_ventas.dao.ClienteDAO;
 import org.iesvdm.pedidos_ventas.dao.ComercialDAO;
 import org.iesvdm.pedidos_ventas.dao.PedidoDAO;
 import org.iesvdm.pedidos_ventas.domain.Cliente;
+import org.iesvdm.pedidos_ventas.domain.Comercial;
 import org.iesvdm.pedidos_ventas.domain.Pedido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,8 @@ public class PedidoService implements ServiceBase<Pedido> {
         return this.clienteDAO.getAll();
     }
 
-    public List<Comercial> getAllComercial() {return this;}
+
+    public List<Comercial> getAllComercial() { return this.comercialDAO.getAll(); }
 
     @Override
     public Pedido one(int id) {

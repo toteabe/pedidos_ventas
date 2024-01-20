@@ -13,7 +13,6 @@ public class UtilDAO {
         return new Pedido(rs.getInt("id"),
                 rs.getDouble("total"),
                 rs.getDate("fecha"),
-                rs.getInt("C.id"),
                 new Cliente(rs.getInt("C.id"),
                         rs.getString("C.nombre"),
                         rs.getString("C.apellido1"),
@@ -21,7 +20,6 @@ public class UtilDAO {
                         rs.getString("C.ciudad"),
                         rs.getInt("C.categoría")
                 ),
-                rs.getInt("CO.id"),
                 new Comercial(rs.getInt("CO.id"),
                         rs.getString("CO.nombre"),
                         rs.getString("CO.apellido1"),
@@ -38,5 +36,13 @@ public class UtilDAO {
                 , rs.getString("ciudad")
                 , rs.getInt("categoría")
         );
+    }
+
+    public static Comercial newComercial(ResultSet rs) throws SQLException {
+        return new Comercial(rs.getInt("id")
+                , rs.getString("nombre")
+                , rs.getString("apellido1")
+                , rs.getString("apellido2")
+                , rs.getDouble("comisión"));
     }
 }

@@ -1,10 +1,18 @@
 package org.iesvdm.pedidos_ventas.dao;
 
+import org.iesvdm.pedidos_ventas.domain.Comercial;
 import java.util.List;
 import java.util.Optional;
-import org.iesvdm.pedidos_ventas.domain.Comercial;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
-public class ComercialDAOImpl<Comercial> implements ComercialDAO<Comercial>{
+@Repository
+public class ComercialDAOImpl implements ComercialDAO<Comercial>{
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     @Override
     public void create(Comercial comcercial) {
 
@@ -12,7 +20,9 @@ public class ComercialDAOImpl<Comercial> implements ComercialDAO<Comercial>{
 
     @Override
     public List<Comercial> getAll() {
-        return null;
+        return this.jdbcTemplate.query("""
+                select * from comercial
+                """, (rs, rowNum) -> UtilDAO.newComercial(rs));
     }
 
     @Override
@@ -21,7 +31,7 @@ public class ComercialDAOImpl<Comercial> implements ComercialDAO<Comercial>{
     }
 
     @Override
-    public void update(Comcercial comcercial) {
+    public void update(Comercial comcercial) {
 
     }
 
