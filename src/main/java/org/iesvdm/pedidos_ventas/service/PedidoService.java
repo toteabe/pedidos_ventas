@@ -60,7 +60,8 @@ public class PedidoService implements ServiceBase<Pedido> {
     @Override
     public void replace(Pedido pedido) {
 
-        this.pedidoDAO.update(pedido);
+        if (pedido.getComercial().getId() > 0) this.pedidoDAO.update(pedido);
+        else this.pedidoDAO.updateSinComercial(pedido);
         log.info("Actualizado pedido con id {}", pedido.getId());
         log.debug("Pedido Actualizaro:\n{}", pedido.toString());
     }

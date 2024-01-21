@@ -62,8 +62,15 @@ tbody td {
   background-color: #aaaaaa;
 }
 
-.select2-container .select2-selection--single {
-  height: 34px;
+.padreerrormessage {
+  position: relative;
+}
+
+.errormessageclass {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
 }
 
 /*For medium screen

@@ -1,4 +1,4 @@
-package org.iesvdm.pedidos_ventas.domain;
+package org.iesvdm.pedidos_ventas.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.iesvdm.pedidos_ventas.domain.Cliente;
+import org.iesvdm.pedidos_ventas.domain.Comercial;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -14,9 +16,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pedido {
-
-    @Min(value=1, message = "{msg.valid.min}")
+public class PedidoFormDTO {
+    @Min(value=0, message = "{msg.valid.min}")
     private int id;
 
     @NotNull(message = "{msg.valid.not.null}")
@@ -24,11 +25,11 @@ public class Pedido {
     @DecimalMin(value="100.0", message = "{msg.valid.max}")
     private Double total;
 
+    @NotNull(message = "{msg.valid.not.null}")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fecha;
-    @Valid
-    private Cliente cliente;
-    @Valid
-    private Comercial comercial;
-
+    @Min(value=1, message = "{msg.valid.min}")
+    private int idCliente;
+    @Min(value=1, message = "{msg.valid.min}")
+    private int idComercial;
 }

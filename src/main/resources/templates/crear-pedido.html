@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="#{msg.pedidos.crear}">Pedidos</title>
     <th:block th:include="fragments/general.html :: headfiles"/>
@@ -8,62 +8,72 @@
 <body>
 
 <div class="container">
-    <form action="/pedidos/crear" th:object="${pedido}" method="post">
-        <div class="row mb-2 border-bottom">
+    <form action="/pedidos/crear" th:object="${pedidoFormDTO}" method="post">
+        <div class="row mb-2">
             <div class="col-md-8 h1" th:text="#{msg.pedidos.crear}">Crear Pedido</div>
             <div class="col-md-4 align-self-center" >
                 <input class="btn btn-primary"  type="submit" th:value="#{btn.crear}" value="Crear">
             </div>
         </div>
-
         <div class="row mb-2">
-            <div class="col-md-3 align-self-center">
+            <div class="col-md-3">
                 <label for="inputfecha" class="form-label" th:text="#{msg.fecha}">
                     Fecha
                 </label>
+                <div>
+                    <input id="inputfecha" type="date" class="form-control" th:classappend="${#fields.hasErrors('fecha')?'is-invalid':''}" th:field="*{fecha}"  />
+                    <ul class="text-danger " th:if="${#fields.hasErrors('fecha')}">
+                        <li th:each="err : ${#fields.errors('fecha')}" th:text="${err}" />
+                    </ul>
+                </div>
             </div>
-            <div class="col-md-3 align-self-center">
-                <input id="inputfecha" type="date" class="form-control" th:field="*{fecha}" />
-            </div>
-            <div class="col-md-3 align-self-center">
-                <label for="inputnombre" class="form-label" th:text="#{msg.total}">
+            <div class="col-md-3">
+                <label for="inputtotal" class="form-label" th:text="#{msg.total}">
                     Total
                 </label>
+                <div>
+                    <input id="inputtotal" class="form-control" th:classappend="${#fields.hasErrors('total')?'is-invalid':''}" type="number" step="any" th:field="*{total}" />
+                    <ul class="text-danger" th:if="${#fields.hasErrors('total')}">
+                        <li th:each="err : ${#fields.errors('total')}" th:text="${err}" />
+                    </ul>
+                </div>
             </div>
-            <div class="col-md-3 align-self-center">
-                <input class="form-control" type="number" step="any" th:field="*{total}" />
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-md-3 align-self-center">
+            <div class="col-md-3">
                 <label for="selectcliente" class="form-label" th:text="#{msg.cliente}">
                     Cliente
                 </label>
+                <div >
+                    <select id="selectcliente" class="js-select2 form-select" th:classappend="${#fields.hasErrors('idCliente')?'is-invalid':''}" th:field="*{idCliente}" >
+                        <option value="-1" th:text="#{msg.seleccione.opcion}"></option>
+                        <option
+                                th:value="${cliente.id}"
+                                th:text="${'Id: ' + cliente.id + ' - ' + cliente.nombre + ' ' + cliente.apellido1 + ' ' + cliente.apellido2}"
+                                th:each="cliente:${listaClientes}"></option>
+                    </select>
+                    <ul class="text-danger" th:if="${#fields.hasErrors('idCliente')}">
+                        <li th:each="err : ${#fields.errors('idCliente')}" th:text="${err}" />
+                    </ul>
+                </div>
             </div>
-            <div class="col-md-3 align-self-center js-select2-parent">
-                <select id="selectcliente" class="js-select2 form-select" th:field="*{cliente.id}">
-                    <option value="-1" th:text="#{msg.seleccione.opcion}"></option>
-                    <option
-                            th:value="${cliente.id}"
-                            th:text="${'Id: ' + cliente.id + ' - ' + cliente.nombre + ' ' + cliente.apellido1 + ' ' + cliente.apellido2}"
-                            th:each="cliente:${listaClientes}"></option>
-                </select>
-            </div>
-            <div class="col-md-3 align-self-center">
+            <div class="col-md-3">
                 <label for="selectcomercial" class="form-label" th:text="#{msg.comercial}">
                     Comercial
                 </label>
+                <div >
+                    <select id="selectcomercial" class="js-select2 form-select" th:classappend="${#fields.hasErrors('idComercial')?'is-invalid':''}" th:field="*{idComercial}">
+                        <option value="-1" th:text="#{msg.seleccione.opcion}"></option>
+                        <option
+                                th:value="${comercial.id}"
+                                th:text="${'Id: ' + comercial.id + ' - ' + comercial.nombre + ' ' + comercial.apellido1 + ' ' + comercial.apellido2}"
+                                th:each="comercial:${listaComerciales}"></option>
+                    </select>
+                    <ul class="text-danger" th:if="${#fields.hasErrors('idComercial')}">
+                        <li th:each="err : ${#fields.errors('idComercial')}" th:text="${err}" />
+                    </ul>
+                </div>
             </div>
-            <div class="col-md-3 align-self-center js-select2-parent" tabindex="-1" role="dialog" aria-hidden="true">
-                <select id="selectcomercial" class="js-select2 form-select" th:field="*{comercial.id}">
-                    <option value="-1" th:text="#{msg.seleccione.opcion}"></option>
-                    <option
-                            th:value="${comercial.id}"
-                            th:text="${'Id: ' + comercial.id + ' - ' + comercial.nombre + ' ' + comercial.apellido1 + ' ' + comercial.apellido2}"
-                            th:each="comercial:${listaComerciales}"></option>
-                </select>
-            </div>
-    </form>
+        </div>
+   </form>
 </div>
 <script th:src="@{/js/bootstrap.bundle.js}" type="text/javascript"></script>
 <script th:src="@{/js/jquery.js}" type="text/javascript"></script>
@@ -71,9 +81,10 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $(".js-select2").select2({
-            dropdownParent: $('.js-select2-parent')
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' )
         });
-        $(".js-select2").select2({theme:"bootstrap"});
     });
 </script>
 </body>

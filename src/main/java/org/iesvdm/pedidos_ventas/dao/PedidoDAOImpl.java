@@ -110,6 +110,14 @@ public class PedidoDAOImpl implements PedidoDAO<Pedido>{
 
     }
 
+    public void updateSinComercial(Pedido pedido) {
+
+        this.jdbcTemplate.update("""
+                      update pedido set total = ?, fecha = ?, id_cliente = ?, id_comercial = ? where id = ?
+                    """, pedido.getTotal(), pedido.getFecha(), pedido.getCliente().getId(), null, pedido.getId());
+
+    }
+
     @Override
     public void delete(long id) {
 
