@@ -1,6 +1,7 @@
 package org.iesvdm.pedidos_ventas.dto;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -22,7 +23,7 @@ public class PedidoFormDTO {
 
     @NotNull(message = "{msg.valid.not.null}")
     @DecimalMin(value="0.0", message = "{msg.valid.min}")
-    @DecimalMin(value="100.0", message = "{msg.valid.max}")
+    @DecimalMax(value="100.0", message = "{msg.valid.max}")
     private Double total;
 
     @NotNull(message = "{msg.valid.not.null}")
